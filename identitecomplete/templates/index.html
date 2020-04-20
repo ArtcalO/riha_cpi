@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Accueil{% endblock %}
+
+{%  block content %}
+
+    <div class="jumbotron text-center">
+      <h1>Binevenu sur RIHA</h1>
+      <h4>Marre des fils d'attentes infernales?<br>Obtenez tout document administratif que vous souhaitez ici sans bouger de chez vous !</h4>
+    </div>
+      
+    {% if user.is_authenticated %}
+
+      <section class="ftco-section form-section" >
+        <div class="container bg-info">
+          <a href="{% url 'riha_all_user_documents' %}">
+          <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section ftco-animate text-center">
+              <div class="card-body m-auto">
+                  <h5 class="card-title text-center pt-5" >Tous Vos Documents</h5>
+              </div>
+            </div>
+          </div>
+          </a>
+        </div>
+      </section>
+      
+      <section class="ftco-section form-section" >
+        <div class="container bg-info">
+          <a href="{% url 'riha_complete_identity' %}">
+          <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section ftco-animate text-center">
+              <div class="card-body m-auto">
+                  <h5 class="card-title text-center pt-5" >Nouvelle Identité Complète</h5>
+              </div>
+            </div>
+          </div>
+          </a>
+        </div>
+      </section>
+
+    {% else %}
+
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h3><a href="{% url 'riha_connexion' %}">Connectez vous !</a></h3>
+          <p>Si vous avez un ciompte RIHA, connectez vous pour cherchez les documents que vous souhaitez !</p>
+        </div>
+        <div class="col">
+          <h3><a href="{% url 'riha_register' %}">Enregistrez-Vous</a></h3>
+          <p>Pour avoir tout document ou remplir un formulaire d'un document que vous souhaitez, vous devrez avoir un compte RIHA en s'enregistrant maintenant</p>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+{% endblock %}

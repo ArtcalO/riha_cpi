@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+    
+<section class="ftco-section form-section" >
+    {% for document in documents_query %}
+    <div class="container bg-primary">
+    <a href="{% url 'riha_cp_one' document.id %}">
+      <div class="row justify-content-center mb-5 pb-3">
+        <div class="col-md-7 heading-section ftco-animate text-center">
+          <div class="card-body m-auto">
+              <h5 class="card-title text-center">{{ document.first_name_beneficiary }}</h5>
+          </div>
+        </div>
+      </div>
+      </a>
+    </div>
+    {% endfor %}
+</section>
+
+{% endblock %}

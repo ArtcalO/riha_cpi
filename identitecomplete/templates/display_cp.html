@@ -1,0 +1,47 @@
+<div style="width=210px; height=290px">
+<div><strong>
+	REPUBLIQUE DU BURUNDI<br>
+	MINISTERE DE L’INTERIEUR<br> 
+	ET DE LA FORMATION PATRIOTIQUE<br>
+	ET DEVELOPPEMENT LOCAL<br>
+	MUNICIPALITE DE {{ municipalite }}<br>
+	COMMUNE URBAINE DE {{ commune }}<br>
+	ZONE DE {{ zone }}<br>
+</strong>
+</div>
+
+
+
+
+<p><strong>ATTESTATION D’IDENTITE COMPLETE N°{{ query_cp.id }}/2020</strong></p>
+
+<p>Je soussigné, {{ zone_leader.first_name }} {{ zone_leader.last_name }}, Chef de Zone {{ zone }}, atteste par la présente que l’identité complète de {% if query_cp.gender == M %} Monsieur {% else %} Madame/Mademoiselle {% endif %} {{ query_cp.first_name_beneficiary }} {{ query_cp.last_name_beneficiary }}, est le suivant :</p>
+
+<div>
+		
+NOM				        	: {{ query_cp.first_name_beneficiary|upper }}<br>
+PRENOM						: {{ query_cp.last_name_beneficairy|capfirst }}<br>
+NOM DU PERE					: {{ query_cp.father_fullname_beneficiary|upper}}<br>
+NOM  DE  LA MERE 			: {{ query_cp.mother_fullname_benefiaciary|upper}}<br>
+LIEU ET DATE DE NAISSANCE	: {{ query_cp.birth_zone|upper }}, en {{ query_cp.birth_year }}<br>
+COMMUNE						: {{ query_cp.birth_commune|upper }}<br>
+PROVINCE 					: {{ query_cp.birth_province|upper }}<br>
+NATIONALITE 		        : {{ query_cp.nationality|upper }}<br>
+ETAT-CIVIL                  : {{ query_cp.marital_status|upper }}<br>
+PROFESSION                  : {{ query_cp.profession|upper }}<br>
+RESIDENCE ACTUELLE          : Zone {{ query_cp.residence_zone|upper }}, Q. {{ query_cp.residence_quarter|upper }}.<br>
+
+</div>
+                                                                   
+
+
+<p>La présente attestation lui est délivrée au vu de sa Carte  Nationale d’Identité  portant  numéro {{query_cp.CNI_number_cp}}  délivrée  à {{ CNI_query.delivered_zone|upper }},  le {{ CNI_query.delivered_date }}.</p>
+
+ 
+                                                          <p><strong>Fait à Bujumbura, le …./…../2020</strong></p>
+
+                                      		       <p><strong>LE CHEF DE ZONE {{ zone }}</strong></p>
+
+
+					                 <p><strong>{{ zone_leader.first_name|capfirst }}   {{ zone_leader.last_name }}</strong></p>
+</div>
