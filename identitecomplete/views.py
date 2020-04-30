@@ -99,17 +99,7 @@ def complete_identity_view(request):
 	if request.method == "POST":
 		if cp_form.is_valid():
 			gender = cp_form.cleaned_data['gender']
-			first_name_beneficiary = cp_form.cleaned_data['first_name_beneficiary']
-			last_name_beneficairy = cp_form.cleaned_data['last_name_beneficairy']
-			father_fullname_beneficiary = cp_form.cleaned_data['father_fullname_beneficiary']
-			mother_fullname_benefiaciary = cp_form.cleaned_data['mother_fullname_benefiaciary']
-			birth_zone = cp_form.cleaned_data['birth_zone']
-			birth_year = cp_form.cleaned_data['birth_year']
-			birth_commune = cp_form.cleaned_data['birth_commune']
-			birth_province = cp_form.cleaned_data['birth_province']
 			nationality = cp_form.cleaned_data['nationality']
-			marital_status = cp_form.cleaned_data['marital_status']
-			profession = cp_form.cleaned_data['profession']
 			residence_zone = cp_form.cleaned_data['residence_zone']
 			residence_quarter = cp_form.cleaned_data['residence_quarter']
 			CNI_number_cp = cp_form.cleaned_data['CNI_number_cp']
@@ -118,24 +108,27 @@ def complete_identity_view(request):
 				CNI_query = CNI.objects.get(CNI_number_CNI=CNI_number_cp)
 				print(CNI_query)
 				print(CNI_query.CNI_number_CNI)
-				CompleteIdentity.objects.create(
+				complete_id = CompleteIdentity.objects.create(
 					user=request.user,
 					gender = gender,
-				 first_name_beneficiary = first_name_beneficiary,
-				  last_name_beneficairy = last_name_beneficairy,
-				   father_fullname_beneficiary = father_fullname_beneficiary,
-				    mother_fullname_benefiaciary = mother_fullname_benefiaciary,
-				     birth_zone = birth_zone,
-				      birth_year = birth_year,
-				       birth_commune = birth_commune, 
-				       birth_province = birth_province, 
-				       nationality = nationality, 
-				       marital_status = marital_status, 
-				       profession = profession, 
-				       residence_zone = residence_zone, 
-				       residence_quarter = residence_quarter, 
-				       CNI_number_cp = CNI_number_cp
-					).save()
+				    nationality = nationality,
+				    residence_zone = residence_zone, 
+				    residence_quarter = residence_quarter, 
+				    CNI_number_cp = CNI_number_cp
+					)
+
+				complete_id.first_name_beneficiary = request.user.first_name
+				complete_id.last_name_beneficairy = request.user.last_name
+				complete_id.father_fullname_beneficiary = CNI_query.father_fullname_CNI
+				complete_id.mother_fullname_benefiaciary = CNI_query.mother_fullname_CNI
+				complete_id.birth_province = CNI_query.province_CNI
+				complete_id.birth_commune = CNI_query.commune_CNI
+				complete_id.birth_zone = CNI_query.birthday_CNI
+				complete_id.marital_status = CNI_query.marital_status_CNI
+				complete_id.profession = CNI_query.kind_of_work_CNI
+				complete_id.birth_year = CNI_query.birthday_CNI
+				
+				complete_id.save()
 				messages.success(request, "Formulaire envoyé")
 				return redirect(document_view)
 			except:
