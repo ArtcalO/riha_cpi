@@ -29,5 +29,6 @@ admin.site.register(CNI)
 admin.site.register(ZoneLeader)
 admin.site.register(CommuneLeader)
 admin.site.register(ProvinceLeader)
+admin.site.register(Payement)
 
 
