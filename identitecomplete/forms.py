@@ -15,16 +15,75 @@ class InscriptionForm(forms.Form):
 	
 
 
-class CompleteIdentityForm(forms.Form):
-	CHOICES = (('0', '----------'),('1','ECOCASH'), ('2','LUMICASH'))
-	gender = forms.CharField( widget=forms.TextInput(attrs={'placeholder':'Genre : M ou F ','class':'form-control'}), label='nom')
-	nationality = forms.CharField( widget=forms.TextInput(attrs={'placeholder':'Nationalité ','class':'form-control'}), label='nationalite')
-	residence_zone = forms.CharField( widget=forms.TextInput(attrs={'placeholder':'Zone de résidance actuelle ','class':'form-control'}), label='prenom')
-	residence_quarter = forms.CharField( widget=forms.TextInput(attrs={'placeholder':'Quartier de résidance actuelle ','class':'form-control'}), label='prenom')
-	payement_method = forms.ChoiceField( widget=forms.Select(attrs={'placeholder':'Methode de payement','class':'form-control'}), choices=CHOICES, label='payement_method')
-	trans_code = forms.CharField( widget=forms.TextInput(attrs={'placeholder':'Code de transaction','class':'form-control'}), label='transaction_code')
+class CompleteIdentityForm(forms.ModelForm):
+	CHOICES = (('0', '----------'),
+				('1','ECOCASH'),
+				('2','LUMICASH'))
+
+	gender = forms.CharField(
+				widget=forms.TextInput(
+					attrs={
+						'placeholder':'Genre : M ou F ',
+						'class':'form-control'
+						}
+					),
+				label='nom'
+				)
+
+	nationality = forms.CharField(
+				widget=forms.TextInput(
+					attrs={
+						'placeholder':'Nationalité ',
+						'class':'form-control'
+						}
+					),
+				label='nationalite'
+				)
+	residence_zone = forms.CharField(
+					widget=forms.TextInput(
+						attrs={
+							'placeholder':'Zone de résidance actuelle ',
+							'class':'form-control'
+							}
+						),
+					label='prenom'
+					)
+
+	residence_quarter = forms.CharField(
+						widget=forms.TextInput(
+							attrs={
+								'placeholder':'Quartier de résidance actuelle ',
+								'class':'form-control'
+								}
+							),
+						label='prenom'
+						)
+	payement_method = forms.ChoiceField(
+						widget=forms.Select(
+							attrs={
+								'placeholder':'Methode de payement',
+								'class':'form-control'
+								}
+							),
+						choices=CHOICES,
+						label='payement_method'
+						)
+	trans_code = forms.CharField(
+				widget=forms.TextInput(
+					attrs={
+						'placeholder':'Code de transaction',
+						'class':'form-control'
+						}
+					),
+				label='transaction_code'
+				)
 	# email = forms.EmailField( widget = forms.TextInput( attrs = {'placeholder':'Adresse electronique ','class':'form-control'} ), label='your email adress')
 	# avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control'}), label='Avatar')
+
+
+	class Meta:
+		model = CompleteIdentity
+		fields = ("gender","nationality","residence_zone","residence_quarter","payement_method","trans_code")
 
 class RegisterCNIForm(forms.Form):
 	first_name_CNI = forms.CharField( widget=forms.TextInput(attrs={'placeholder':'Nom ','class':'form-control'}), label='nom')

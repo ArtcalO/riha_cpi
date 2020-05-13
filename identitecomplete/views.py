@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 
+
 def home_view(request):
 
 
@@ -125,7 +126,10 @@ def register_CNI_pics(request):
 
 @login_required
 def document_view(request):
-	documents_query = C(user=request.user)
+	try:
+		documents_query = CompleteIdentity.objects.filter(user=request.user)
+	except:
+		return redirect(_404)
 	return render(request, 'all_documents.html', locals());
 
 @login_required
@@ -147,53 +151,57 @@ def cp_one_view(request, id):
 
 @login_required
 def complete_identity_view(request):
-
+	# Headers
+	try:
+		CNI_query = CNI.objects.get(user=request.user)
+	except:
+		messages.error(request, "Vous deveze enregistrer votre Carte d'Idéntité !")
+		return redirect(register_CNI)
+	template_name='all_forms.html'
 	cp_form = CompleteIdentityForm(request.POST)
 	if request.method == "POST":
 		if cp_form.is_valid():
-			gender = cp_form.cleaned_data['gender']
-			nationality = cp_form.cleaned_data['nationality']
-			residence_zone = cp_form.cleaned_data['residence_zone']
-			residence_quarter = cp_form.cleaned_data['residence_quarter']
-			payement_method = cp_form.cleaned_data['payement_method'] 
-			trans_code = cp_form.cleaned_data['trans_code'] 
-			try:
-				CNI_query = CNI.objects.get(user=request.user)
-				print(CNI_query)
-				print(CNI_query.CNI_number_CNI)
-				complete_id = CompleteIdentity.objects.create(
-					user = request.user,
-					gender = gender,
-				    nationality = nationality,
-				    residence_zone = residence_zone, 
-				    residence_quarter = residence_quarter,
-				    payement_method = payement_method,
-					trans_code = trans_code
-					)
+			complete_id = cp_form.save(commit=False)
+			complete_id.user = request.user
+			complete_id.first_name_beneficiary = CNI_query.first_name_CNI
+			complete_id.last_name_beneficairy = CNI_query.last_name_CNI
+			complete_id.father_fullname_beneficiary = CNI_query.father_fullname_CNI
+			complete_id.mother_fullname_benefiaciary = CNI_query.mother_fullname_CNI
+			complete_id.birth_province = CNI_query.birth_province_CNI
+			complete_id.birth_commune = CNI_query.birth_commune_CNI
+			complete_id.birth_zone = CNI_query.birthday_CNI
+			complete_id.marital_status = CNI_query.marital_status_CNI
+			complete_id.profession = CNI_query.kind_of_work_CNI
+			complete_id.birth_year = CNI_query.birthday_CNI
+			complete_id.CNI_number_cp = CNI_query.CNI_number_CNI
 
-				complete_id.first_name_beneficiary = CNI_query.first_name_CNI
-				complete_id.last_name_beneficairy = CNI_query.last_name_CNI
-				complete_id.father_fullname_beneficiary = CNI_query.father_fullname_CNI
-				complete_id.mother_fullname_benefiaciary = CNI_query.mother_fullname_CNI
-				complete_id.birth_province = CNI_query.birprovince_CNI
-				complete_id.birth_commune = CNI_query.birth_commune_CNI
-				complete_id.birth_zone = CNI_query.birthday_CNI
-				complete_id.marital_status = CNI_query.marital_status_CNI
-				complete_id.profession = CNI_query.kind_of_work_CNI
-				complete_id.birth_year = CNI_query.birthday_CNI
-				complete_id.CNI_number_cp = CNI_query.CNI_number_CNI
-				
+			#Chiesfs queries
+
+			zone = get_object_or_404(Zone, name=complete_id.residence_zone)
+			commune = zone.commune
+			municipalite = commune.province
+			zone_leader = get_object_or_404(ZoneLeader, zone_leaded=zone)
+
+			if '_preview' in request.POST:
+				template_name = 'cp_preview.html'
+				if '_cancel' in request.POST:
+					return redirect(complete_identity_view)
+				elif '_send' in request.POST:
+					complete_id.save()
+					messages.success(request, "Formulaire envoyé")
+					return redirect(document_view)
+
+			elif '_send' in request.POST:
+				print('#########################')
+				print(complete_id)
 				complete_id.save()
 				messages.success(request, "Formulaire envoyé")
 				return redirect(document_view)
-			except:
-				messages.error(request, "Echec, une erreu s'est produite !")
-				return redirect(home_view)
+
 	cp_form = CompleteIdentityForm()
-	return render(request, "all_forms.html", locals())
+	return render(request, template_name, locals())
 
 @login_required
-def cp_preview(request):
-
-	complete_id.save()
-	return render(request, "cp_preview.html", locals())
+def _404(request):
+	
+	return render(request, "404_.html", locals())
